@@ -6,7 +6,8 @@
 
     <title>Equation Genius – Mental Math & Equation Game</title>
 
-    <meta name="description" content="Equation Genius is an equation game for iPhone that challenges your mental math skills with auto-generated algebra-style equations, Challenge Mode, online multiplayer, and AI opponents.">
+    <meta name="description"
+          content="Equation Genius is a puzzle game that improves your mental math by solving auto-generated algebra-style equations. Challenge yourself, compete online, and practice against AI opponents.">
 
     <style>
         * {
@@ -15,31 +16,38 @@
 
         body {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.7;
             color: #f8fafc;
 
             background:
-                radial-gradient(circle at top left, #3b82f6 0%, transparent 35%),
-                radial-gradient(circle at bottom right, #14b8a6 0%, transparent 35%),
+                radial-gradient(circle at top left, #2563eb 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #06b6d4 0%, transparent 35%),
                 linear-gradient(135deg, #0f172a, #111827);
 
             min-height: 100vh;
+
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px;
+
+            padding: 32px;
         }
 
         .card {
             width: 100%;
-            max-width: 850px;
-            background: rgba(255,255,255,0.08);
+            max-width: 860px;
+
+            background: rgba(255,255,255,.08);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(255,255,255,.15);
-            border-radius: 20px;
-            padding: 50px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.4);
+
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 24px;
+
+            padding: 56px;
+
+            box-shadow: 0 20px 60px rgba(0,0,0,.45);
         }
 
         .app-icon {
@@ -47,71 +55,100 @@
             height: 120px;
             display: block;
             margin: 0 auto 24px;
-            border-radius: 24px;
-            box-shadow: 0 12px 30px rgba(0,0,0,.35);
+
+            border-radius: 26px;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,.4);
         }
 
         h1 {
             margin: 0;
             text-align: center;
             font-size: 3rem;
+            font-weight: 700;
         }
 
         .tagline {
             text-align: center;
-            font-size: 1.3rem;
             color: #cbd5e1;
-            margin: 16px 0 36px;
-        }
-
-        h2 {
-            margin-top: 40px;
+            font-size: 1.25rem;
+            margin: 14px 0 40px;
         }
 
         p {
             margin-bottom: 18px;
         }
 
+        h2 {
+            margin-top: 42px;
+            margin-bottom: 16px;
+        }
+
         ul {
-            padding-left: 22px;
+            padding-left: 24px;
         }
 
         li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        .button {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 14px 28px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: background .2s;
+        .store {
+            text-align: center;
+            margin-top: 42px;
         }
 
-        .button:hover {
-            background: #1d4ed8;
+        .store img {
+            width: 190px;
+            transition: transform .2s ease;
+        }
+
+        .store img:hover {
+            transform: scale(1.03);
         }
 
         footer {
+            text-align: center;
             margin-top: 50px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,.15);
+            border-top: 1px solid rgba(255,255,255,.12);
             color: #cbd5e1;
             font-size: .9rem;
-            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+
+            .card {
+                padding: 32px;
+            }
+
+            h1 {
+                font-size: 2.3rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .app-icon {
+                width: 96px;
+                height: 96px;
+            }
+
+            .store img {
+                width: 170px;
+            }
         }
     </style>
+
 </head>
 
 <body>
 
 <div class="card">
 
-    <img src="app-icon.png" alt="Equation Genius App Icon" class="app-icon">
+    <img src="app-icon.png"
+         alt="Equation Genius App Icon"
+         class="app-icon">
 
     <h1>Equation Genius</h1>
 
@@ -120,15 +157,15 @@
     </p>
 
     <p>
-        Equation Genius is a puzzle game designed to improve your mental math through fast, progressively challenging equation solving. Every equation is randomly generated, ensuring that each game offers a fresh experience.
+        Equation Genius is a fast-paced puzzle game that helps improve your mental math through progressively challenging equation solving. Every equation is randomly generated, ensuring every game feels fresh.
     </p>
 
     <p>
-        Solve equations using addition, subtraction, multiplication, and division as the difficulty gradually increases with new equation patterns and more complex challenges.
+        Solve equations using addition, subtraction, multiplication and division as the game introduces increasingly challenging equation patterns.
     </p>
 
     <p>
-        Test your speed and accuracy in Play Mode, master individual stages in Challenge Mode, or compete against players around the world in online multiplayer. You can also sharpen your skills against AI opponents whenever you like.
+        Play endlessly in Play Mode, master specific levels in Challenge Mode, compete against friends and players around the world in online multiplayer, or sharpen your skills against AI opponents.
     </p>
 
     <h2>Features</h2>
@@ -136,19 +173,23 @@
     <ul>
         <li>Auto-generated algebra-style equations</li>
         <li>Whole-number solutions only</li>
-        <li>Increasing difficulty and new equation types</li>
+        <li>Increasing difficulty and new equation patterns</li>
         <li>Play Mode and Challenge Mode</li>
-        <li>Online multiplayer and friend matches</li>
+        <li>Online multiplayer</li>
         <li>AI opponents</li>
         <li>Game Center leaderboards</li>
     </ul>
 
-    <a class="button"
-       href="https://apps.apple.com/se/app/equation-genius/id1475407618"
-       target="_blank"
-       rel="noopener noreferrer">
-        Download on the App Store
-    </a>
+    <div class="store">
+        <a href="https://apps.apple.com/se/app/equation-genius/id1475407618"
+           target="_blank"
+           rel="noopener noreferrer">
+
+            <img src="app-store-badge.svg"
+                 alt="Download on the App Store">
+
+        </a>
+    </div>
 
     <footer>
         © 2026 Equation Genius
