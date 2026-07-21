@@ -1,119 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Equation Genius – Mental Math and Equation Game</title>
+    <title>Equation Genius – Mental Math & Equation Game</title>
 
-  <meta
-    name="description"
-    content="Equation Genius is a mental math and equation game for iPhone. Solve auto-generated algebra-style equations, improve your speed and accuracy, complete challenges, and compete in multiplayer matches."
-  >
+    <meta name="description" content="Equation Genius is an equation game for iPhone that challenges your mental math skills with auto-generated algebra-style equations, Challenge Mode, multiplayer, and AI opponents.">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #1f2937;
-      line-height: 1.6;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 64px 24px;
-    }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.7;
+            color: #f8fafc;
 
-    h1 {
-      font-size: 48px;
-      margin-bottom: 8px;
-    }
+            background:
+                radial-gradient(circle at top left, #3b82f6 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #14b8a6 0%, transparent 35%),
+                linear-gradient(135deg, #0f172a, #111827);
 
-    h2 {
-      margin-top: 40px;
-    }
+            min-height: 100vh;
 
-    .subtitle {
-      font-size: 22px;
-      color: #4b5563;
-      margin-bottom: 32px;
-    }
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-    .button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 14px 22px;
-      background: #111827;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: bold;
-    }
+            padding: 30px;
+        }
 
-    ul {
-      padding-left: 22px;
-    }
+        .card {
+            width: 100%;
+            max-width: 850px;
 
-    footer {
-      margin-top: 56px;
-      padding-top: 24px;
-      border-top: 1px solid #d1d5db;
-      color: #6b7280;
-      font-size: 14px;
-    }
-  </style>
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(14px);
+
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 20px;
+
+            padding: 50px;
+
+            box-shadow: 0 20px 60px rgba(0,0,0,.4);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 3rem;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 35px;
+        }
+
+        h2 {
+            margin-top: 40px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 14px 28px;
+
+            background: #2563eb;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 10px;
+
+            font-weight: 600;
+
+            transition: background .2s;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,.15);
+
+            color: #cbd5e1;
+            font-size: .9rem;
+        }
+    </style>
 </head>
 
 <body>
-  <main>
+
+<div class="card">
+
     <h1>Equation Genius</h1>
 
-    <p>
-      Equation Genius helps you train your brain by solving quick
-      algebra-style math equations. Every equation is auto-generated,
-      and all solutions are whole integers.
+    <p class="tagline">
+        Train your brain by solving auto-generated algebra-style equations.
     </p>
 
     <p>
-      Solve equations using addition, subtraction, multiplication, and
-      division. The difficulty increases as you progress, introducing
-      new equation patterns and more challenging structures.
+        Equation Genius is a fast-paced puzzle game that helps improve mental math through progressively challenging equation solving. Every equation is randomly generated, ensuring that no two games are the same.
     </p>
 
     <p>
-      Play Mode tests how far you can go. Challenge Mode lets you practise
-      individual levels and improve your personal best. Multiplayer Mode
-      allows you to compete in quick online matches, challenge friends
-      using a room code, or practise against AI opponents.
+        Test your speed and accuracy in Play Mode, master individual stages in Challenge Mode, or compete against friends and players around the world in online multiplayer. You can also practice against AI opponents whenever you like.
     </p>
 
-    <h2>Key Features</h2>
+    <h2>Features</h2>
 
     <ul>
-      <li>Auto-generated algebra-style equations</li>
-      <li>Whole-number answers with no decimals or fractions</li>
-      <li>Increasing difficulty and new equation types</li>
-      <li>Play Mode and Challenge Mode</li>
-      <li>Online multiplayer and friend matches</li>
-      <li>AI opponents for practice</li>
-      <li>Time-based scoring and personal bests</li>
-      <li>Game Center leaderboard</li>
+        <li>Auto-generated algebra-style equations</li>
+        <li>Increasing difficulty with new equation patterns</li>
+        <li>Play Mode and Challenge Mode</li>
+        <li>Online multiplayer</li>
+        <li>AI opponents</li>
+        <li>Game Center leaderboards</li>
+        <li>Whole-number solutions only</li>
     </ul>
 
-    <a
-      class="button"
-      href="YOUR_APP_STORE_LINK"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Download on the App Store
+    <a class="button" href="https://apps.apple.com/se/app/equation-genius/id1475407618">
+        Download on the App Store
     </a>
 
     <footer>
-      © 2026 Equation Genius
+        © 2026 Equation Genius
     </footer>
-  </main>
+
+</div>
+
 </body>
-</html>
+</html>>
