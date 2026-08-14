@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0d4f63">
+  <title>Equation Genius Challenge</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #07384a;
+      color: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100svh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #07384a 0%, #0d6371 100%);
+    }
+
+    main {
+      width: min(100%, 460px);
+      text-align: center;
+    }
+
+    .icon {
+      width: 104px;
+      height: 104px;
+      border-radius: 23px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    h1 {
+      margin: 24px 0 10px;
+      font-size: clamp(30px, 8vw, 42px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: #ffd15a;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .message {
+      margin: 0 auto;
+      max-width: 34ch;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .availability {
+      margin: 12px 0 26px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 15px;
+    }
+
+    .store-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      padding: 0 24px;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #082f3e;
+      font-size: 17px;
+      font-weight: 750;
+      text-decoration: none;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+    }
+
+    .store-link:focus-visible {
+      outline: 3px solid #ffd15a;
+      outline-offset: 4px;
+    }
+
+    .not-found { display: none; }
+
+    body.invalid .challenge { display: none; }
+    body.invalid .not-found { display: block; }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="icon" src="/app-icon.png" alt="Equation Genius app icon">
+    <h1>Equation Genius</h1>
+
+    <section class="challenge">
+      <p class="eyebrow">Daily Challenge</p>
+      <p class="message" id="challenge-message">You've been invited to an Equation Genius challenge.</p>
+      <p class="availability">Available for iPhone and iPad.</p>
+      <a class="store-link" href="https://apps.apple.com/app/equation-genius/id1475407618">View on the App Store</a>
+    </section>
+
+    <section class="not-found">
+      <p class="message">This page could not be found.</p>
+      <p class="availability">Equation Genius is available for iPhone and iPad.</p>
+      <a class="store-link" href="https://apps.apple.com/app/equation-genius/id1475407618">View on the App Store</a>
+    </section>
+  </main>
+
+  <script>
+    const challengePath = /^\/challenge\/[^/]+\/?$/;
+    if (!challengePath.test(window.location.pathname)) {
+      document.body.classList.add("invalid");
+    } else if (new URLSearchParams(window.location.search).get("source") === "puzzle") {
+      document.getElementById("challenge-message").textContent = "Can you solve this Equation Genius challenge?";
+    }
+  </script>
+</body>
+</html>
