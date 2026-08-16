@@ -1,0 +1,9 @@
+name = "equation-genius-share-pages"
+main = "src/index.js"
+compatibility_date = "2026-08-16"
+workers_dev = false
+
+routes = [
+  { pattern = "equation-genius.com/challenge/*", zone_name = "equation-genius.com" },
+  { pattern = "equation-genius.com/puzzle/*", zone_name = "equation-genius.com" }
+]
