@@ -1,17 +1,239 @@
 <!doctype html>
-
-<html>
-
+<html lang="en">
 <head>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
 
-  <title>Equation Genius</title>
+  <title>Equation Genius – Algebra Puzzle Game</title>
+  <meta name="description" content="Solve auto-generated algebra-style puzzles, take on the Daily Challenge, master levels in Practice, and compete online.">
 
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Equation Genius">
+  <meta property="og:title" content="Equation Genius">
+  <meta property="og:description" content="Solve auto-generated algebra-style puzzles, take on the Daily Challenge, master levels in Practice, and compete online.">
+  <meta property="og:image" content="https://equation-genius.com/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Equation Genius">
+  <meta name="twitter:description" content="Solve auto-generated algebra-style puzzles, take on the Daily Challenge, master levels in Practice, and compete online.">
+  <meta name="twitter:image" content="https://equation-genius.com/social-preview.png">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --yellow: #ffd11a;
+      --panel: rgba(255, 255, 255, .075);
+      --border: rgba(255, 255, 255, .13);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 32px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(26, 99, 255, .78), transparent 32rem),
+        radial-gradient(circle at 92% 88%, rgba(0, 190, 214, .55), transparent 34rem),
+        linear-gradient(145deg, #071333, #092641 58%, #07182e);
+    }
+
+    main {
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: clamp(30px, 6vw, 64px);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: rgba(7, 24, 46, .74);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .38);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero { text-align: center; }
+
+    .app-icon {
+      width: 112px;
+      height: 112px;
+      border-radius: 25px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .4);
+    }
+
+    h1 {
+      margin: 18px 0 0;
+      font-size: clamp(2.4rem, 7vw, 4.2rem);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+    }
+
+    .tagline {
+      margin: 12px 0 28px;
+      color: var(--yellow);
+      font-size: clamp(1.15rem, 3vw, 1.45rem);
+      font-weight: 750;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .modes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 42px 0 18px;
+    }
+
+    .mode, .feature-panel {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--panel);
+    }
+
+    h2, h3 { margin-top: 0; }
+
+    h2 {
+      margin-bottom: 18px;
+      font-size: 1.65rem;
+    }
+
+    h3 {
+      margin-bottom: 7px;
+      font-size: 1.18rem;
+    }
+
+    .mode p, .feature-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .feature-panel { margin-top: 16px; }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 28px;
+      margin: 0;
+      padding-left: 22px;
+      color: var(--muted);
+    }
+
+    .features li::marker { color: var(--yellow); }
+
+    .store {
+      margin-top: 42px;
+      text-align: center;
+    }
+
+    .store img {
+      width: 188px;
+      transition: transform .2s ease;
+    }
+
+    .store a:hover img { transform: scale(1.03); }
+
+    .availability {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    footer {
+      margin-top: 44px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    footer a { color: var(--text); }
+
+    @media (max-width: 650px) {
+      body { padding: 0; }
+      main { border: 0; border-radius: 0; }
+      .modes, .features { grid-template-columns: 1fr; }
+      .app-icon { width: 92px; height: 92px; border-radius: 21px; }
+    }
+  </style>
 </head>
 
 <body>
+  <main>
+    <section class="hero">
+      <img src="app-icon.png" alt="Equation Genius app icon" class="app-icon">
+      <h1>Equation Genius</h1>
+      <p class="tagline">Solve. Improve. Compete.</p>
+      <p class="intro">
+        Equation Genius is an equation game where you solve algebra-style math puzzles,
+        compete for faster times, and progress through increasingly challenging equations.
+        Every equation is automatically generated, and all solutions are whole integers.
+      </p>
+    </section>
 
+    <section class="modes" aria-label="Game modes">
+      <article class="mode">
+        <h3>Play Mode</h3>
+        <p>Progress level by level, improve your speed and accuracy, and compete on the Game Center leaderboard.</p>
+      </article>
+
+      <article class="mode">
+        <h3>Daily Challenge</h3>
+        <p>Solve a new equation every day, build your streak, and climb the seasonal leaderboard with monthly resets.</p>
+      </article>
+
+      <article class="mode">
+        <h3>Practice Mode</h3>
+        <p>Master individual levels at your own pace and improve your personal bests.</p>
+      </article>
+
+      <article class="mode">
+        <h3>Multiplayer Mode</h3>
+        <p>Compete through Quick Match, challenge a friend with a room code, or practice against AI.</p>
+      </article>
+    </section>
+
+    <section class="feature-panel">
+      <h2>More ways to play</h2>
+      <p>
+        Share equations with friends using playable links and see how quickly they can solve them.
+        Shared equations are quick, timed challenges.
+      </p>
+    </section>
+
+    <section class="feature-panel">
+      <h2>Key features</h2>
+      <ul class="features">
+        <li>Auto-generated algebra-style equations</li>
+        <li>Whole-number answers—no decimals or fractions</li>
+        <li>New equation types at higher levels</li>
+        <li>Time-based scoring that rewards speed</li>
+        <li>Daily streaks and seasonal rankings</li>
+        <li>Some advanced equations have multiple solutions</li>
+      </ul>
+    </section>
+
+    <div class="store">
+      <a href="https://apps.apple.com/se/app/equation-genius/id1475407618" target="_blank" rel="noopener noreferrer">
+        <img src="app-store-badge.svg" alt="Download on the App Store">
+      </a>
+      <p class="availability">Available on iPhone and iPad · Compatible with Mac</p>
+    </div>
+
+    <footer>
+      © 2026 Equation Genius · <a href="privacy.html">Privacy Policy</a>
+    </footer>
+  </main>
 </body>
-
 </html>
