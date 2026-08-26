@@ -7,6 +7,7 @@ import {
   isValidUTCDateID,
   normalizeSenderTime,
   parseShareURL,
+  resolveLocale,
 } from "../src/index.js";
 
 function installEmptyCache() {
@@ -44,6 +45,15 @@ test("sender time is bounded and normalized to hundredths", () => {
   assert.equal(normalizeSenderTime("0"), null);
   assert.equal(normalizeSenderTime("NaN"), null);
   assert.equal(normalizeSenderTime("86400"), null);
+});
+
+test("supported browser languages resolve by quality with English fallback", () => {
+  assert.equal(resolveLocale("fr-CA,fr;q=0.9,en;q=0.8"), "fr");
+  assert.equal(resolveLocale("en;q=0.4,sv-SE;q=0.9"), "sv");
+  assert.equal(resolveLocale("zh-Hans-CN,zh;q=0.9"), "zh-Hans");
+  assert.equal(resolveLocale("zh-Hant-TW,en;q=0.8"), "en");
+  assert.equal(resolveLocale("it-IT"), "en");
+  assert.equal(resolveLocale(null), "en");
 });
 
 test("duplicate or malformed time parameters fail", () => {
@@ -93,7 +103,7 @@ test("the initial challenge response is HTTP 200 HTML with exact generic metadat
   assert.match(html, /property="og:title" content="Equation Genius Daily Challenge"/);
   assert.match(html, /property="og:url" content="https:\/\/equation-genius\.com\/challenge\/2026-08-16\?time=17\.48"/);
   assert.match(html, /property="og:image" content="https:\/\/equation-genius\.com\/social-preview\.png"/);
-  assert.equal(writes[0].request.url, "https://equation-genius.com/challenge/2026-08-16?time=17.48");
+  assert.equal(writes[0].request.url, "https://equation-genius.com/challenge/2026-08-16?time=17.48&__eg_locale=en");
 });
 
 test("the initial puzzle response is HTTP 200 without exposing an answer", async () => {
@@ -109,4 +119,86 @@ test("the initial puzzle response is HTTP 200 without exposing an answer", async
   assert.match(html, /property="og:title" content="Can you solve this puzzle\?"/);
   assert.match(html, /property="og:url" content="https:\/\/equation-genius\.com\/puzzle\/p1-l10-s42"/);
   assert.equal(html.includes("answer=12"), false);
+});
+
+test("share pages localize visible copy, metadata, language, and direction", async () => {
+  installEmptyCache();
+  const swedish = await worker.fetch(
+    new Request("https://equation-genius.com/challenge/2026-08-16", {
+      headers: { "Accept-Language": "sv-SE,sv;q=0.9" },
+    }),
+    {},
+    { waitUntil() {} }
+  );
+  const swedishHTML = await swedish.text();
+  assert.equal(swedish.headers.get("content-language"), "sv");
+  assert.equal(swedish.headers.get("vary"), "Accept-Language");
+  assert.match(swedishHTML, /<html lang="sv" dir="ltr">/);
+  assert.match(swedishHTML, /Dagens utmaning/);
+  assert.match(swedishHTML, /Hämta eller uppdatera Equation Genius/);
+  assert.match(swedishHTML, /property="og:title" content="Equation Genius – Dagens utmaning"/);
+
+  installEmptyCache();
+  const arabic = await worker.fetch(
+    new Request("https://equation-genius.com/puzzle/p1-l10-s42", {
+      headers: { "Accept-Language": "ar" },
+    }),
+    {},
+    { waitUntil() {} }
+  );
+  const arabicHTML = await arabic.text();
+  assert.equal(arabic.headers.get("content-language"), "ar");
+  assert.match(arabicHTML, /<html lang="ar" dir="rtl">/);
+  assert.match(arabicHTML, /مسألة مشتركة/);
+});
+
+test("every supported locale renders its established share-page terminology", async () => {
+  const expectations = {
+    en: ["Shared Puzzle", "Get or Update Equation Genius"],
+    sv: ["Delad ekvation", "Hämta eller uppdatera Equation Genius"],
+    de: ["Geteilte Gleichung", "Equation Genius laden oder aktualisieren"],
+    fr: ["Équation partagée", "Obtenir ou mettre à jour Equation Genius"],
+    es: ["Ecuación compartida", "Obtener o actualizar Equation Genius"],
+    ja: ["共有された方程式", "Equation Geniusを入手またはアップデート"],
+    ar: ["مسألة مشتركة", "تنزيل Equation Genius أو تحديثه"],
+    "zh-Hans": ["分享的方程", "获取或更新 Equation Genius"],
+  };
+
+  for (const [locale, expectedCopy] of Object.entries(expectations)) {
+    installEmptyCache();
+    const result = await worker.fetch(
+      new Request("https://equation-genius.com/puzzle/p1-l10-s42", {
+        headers: { "Accept-Language": locale },
+      }),
+      {},
+      { waitUntil() {} }
+    );
+    const html = await result.text();
+    assert.equal(result.headers.get("content-language"), locale);
+    for (const copy of expectedCopy) assert.equal(html.includes(copy), true, `${locale}: ${copy}`);
+  }
+});
+
+test("the cache key isolates localized responses without changing the canonical URL", async () => {
+  const writes = installEmptyCache();
+  const url = "https://equation-genius.com/challenge/2026-08-16?time=17.48";
+
+  for (const language of ["sv", "de"]) {
+    const pending = [];
+    await worker.fetch(
+      new Request(url, { headers: { "Accept-Language": language } }),
+      {},
+      { waitUntil(promise) { pending.push(promise); } }
+    );
+    await Promise.all(pending);
+  }
+
+  assert.equal(writes.length, 2);
+  assert.equal(writes[0].request.url.endsWith("__eg_locale=sv"), true);
+  assert.equal(writes[1].request.url.endsWith("__eg_locale=de"), true);
+  for (const write of writes) {
+    const html = await write.response.text();
+    assert.match(html, /property="og:url" content="https:\/\/equation-genius\.com\/challenge\/2026-08-16\?time=17\.48"/);
+    assert.equal(html.includes("__eg_locale"), false);
+  }
 });

@@ -2,6 +2,146 @@ const CANONICAL_ORIGIN = "https://equation-genius.com";
 const SOCIAL_IMAGE_URL = `${CANONICAL_ORIGIN}/social-preview.png`;
 const APP_STORE_URL = "https://apps.apple.com/app/equation-genius/id1475407618";
 const CACHE_CONTROL = "public, max-age=3600, s-maxage=604800, stale-while-revalidate=86400";
+const DEFAULT_LOCALE = "en";
+
+const COPY = {
+  en: {
+    appIconAlt: "Equation Genius app icon",
+    availability: "Equation Genius is available for iPhone and iPad, and compatible with Mac.",
+    storeAction: "Get or Update Equation Genius",
+    challenge: {
+      title: "Equation Genius Daily Challenge",
+      description: "Can you beat the challenge?",
+      eyebrow: "Daily Challenge",
+      message: "You've been invited to an Equation Genius challenge.",
+    },
+    puzzle: {
+      title: "Can you solve this puzzle?",
+      description: "Try the puzzle in Equation Genius.",
+      eyebrow: "Shared Puzzle",
+      message: "Can you solve this Equation Genius puzzle?",
+    },
+  },
+  sv: {
+    appIconAlt: "Appikonen för Equation Genius",
+    availability: "Equation Genius finns för iPhone och iPad och är kompatibelt med Mac.",
+    storeAction: "Hämta eller uppdatera Equation Genius",
+    challenge: {
+      title: "Equation Genius – Dagens utmaning",
+      description: "Kan du klara utmaningen?",
+      eyebrow: "Dagens utmaning",
+      message: "Du har blivit utmanad i Equation Genius.",
+    },
+    puzzle: {
+      title: "Kan du lösa den här ekvationen?",
+      description: "Prova ekvationen i Equation Genius.",
+      eyebrow: "Delad ekvation",
+      message: "Kan du lösa den här Equation Genius-ekvationen?",
+    },
+  },
+  de: {
+    appIconAlt: "Equation Genius-App-Symbol",
+    availability: "Equation Genius ist für iPhone und iPad verfügbar und mit dem Mac kompatibel.",
+    storeAction: "Equation Genius laden oder aktualisieren",
+    challenge: {
+      title: "Equation Genius – Tägliche Challenge",
+      description: "Kannst du die Challenge meistern?",
+      eyebrow: "Tägliche Challenge",
+      message: "Du wurdest zu einer Equation Genius-Challenge eingeladen.",
+    },
+    puzzle: {
+      title: "Kannst du diese Gleichung lösen?",
+      description: "Löse die Gleichung in Equation Genius.",
+      eyebrow: "Geteilte Gleichung",
+      message: "Kannst du diese Equation Genius-Gleichung lösen?",
+    },
+  },
+  fr: {
+    appIconAlt: "Icône de l’app Equation Genius",
+    availability: "Equation Genius est disponible sur iPhone et iPad, et compatible avec Mac.",
+    storeAction: "Obtenir ou mettre à jour Equation Genius",
+    challenge: {
+      title: "Equation Genius – Défi du jour",
+      description: "Pouvez-vous relever le défi ?",
+      eyebrow: "Défi du jour",
+      message: "Vous avez été invité à relever un défi Equation Genius.",
+    },
+    puzzle: {
+      title: "Pouvez-vous résoudre cette équation ?",
+      description: "Essayez cette équation dans Equation Genius.",
+      eyebrow: "Équation partagée",
+      message: "Pouvez-vous résoudre cette équation d’Equation Genius ?",
+    },
+  },
+  es: {
+    appIconAlt: "Icono de la app Equation Genius",
+    availability: "Equation Genius está disponible para iPhone y iPad y es compatible con Mac.",
+    storeAction: "Obtener o actualizar Equation Genius",
+    challenge: {
+      title: "Equation Genius – Desafío diario",
+      description: "¿Puedes superar el desafío?",
+      eyebrow: "Desafío diario",
+      message: "Te han invitado a un desafío de Equation Genius.",
+    },
+    puzzle: {
+      title: "¿Puedes resolver esta ecuación?",
+      description: "Prueba la ecuación en Equation Genius.",
+      eyebrow: "Ecuación compartida",
+      message: "¿Puedes resolver esta ecuación de Equation Genius?",
+    },
+  },
+  ja: {
+    appIconAlt: "Equation Geniusのアプリアイコン",
+    availability: "Equation GeniusはiPhoneとiPadで利用でき、Macにも対応しています。",
+    storeAction: "Equation Geniusを入手またはアップデート",
+    challenge: {
+      title: "Equation Genius – デイリーチャレンジ",
+      description: "チャレンジをクリアできますか？",
+      eyebrow: "デイリーチャレンジ",
+      message: "Equation Geniusのチャレンジに招待されました。",
+    },
+    puzzle: {
+      title: "この方程式を解けますか？",
+      description: "Equation Geniusで方程式に挑戦しましょう。",
+      eyebrow: "共有された方程式",
+      message: "このEquation Geniusの方程式を解けますか？",
+    },
+  },
+  ar: {
+    appIconAlt: "أيقونة تطبيق Equation Genius",
+    availability: "يتوفر Equation Genius على iPhone وiPad، وهو متوافق مع Mac.",
+    storeAction: "تنزيل Equation Genius أو تحديثه",
+    challenge: {
+      title: "Equation Genius – التحدي اليومي",
+      description: "هل يمكنك إكمال التحدي؟",
+      eyebrow: "التحدي اليومي",
+      message: "تمت دعوتك إلى تحدٍ في Equation Genius.",
+    },
+    puzzle: {
+      title: "هل يمكنك حل هذه المعادلة؟",
+      description: "جرّب حل المعادلة في Equation Genius.",
+      eyebrow: "مسألة مشتركة",
+      message: "هل يمكنك حل هذه المسألة في Equation Genius؟",
+    },
+  },
+  "zh-Hans": {
+    appIconAlt: "Equation Genius App 图标",
+    availability: "Equation Genius 可在 iPhone 和 iPad 上使用，并兼容 Mac。",
+    storeAction: "获取或更新 Equation Genius",
+    challenge: {
+      title: "Equation Genius – 每日挑战",
+      description: "你能完成这项挑战吗？",
+      eyebrow: "每日挑战",
+      message: "你收到了 Equation Genius 挑战邀请。",
+    },
+    puzzle: {
+      title: "你能解出这道方程吗？",
+      description: "在 Equation Genius 中挑战这道方程。",
+      eyebrow: "分享的方程",
+      message: "你能解出这道 Equation Genius 方程吗？",
+    },
+  },
+};
 
 export default {
   async fetch(request, env, context) {
@@ -19,14 +159,19 @@ export default {
       });
     }
 
+    const locale = resolveLocale(request.headers.get("Accept-Language"));
     const cache = caches.default;
-    const cacheKey = new Request(parsed.canonicalURL, { method: "GET" });
+    const cacheURL = new URL(parsed.canonicalURL);
+    cacheURL.searchParams.set("__eg_locale", locale);
+    const cacheKey = new Request(cacheURL.toString(), { method: "GET" });
     let page = await cache.match(cacheKey);
 
     if (!page) {
-      page = response(renderSharePage(parsed), 200, {
+      page = response(renderSharePage(parsed, locale), 200, {
         "Cache-Control": CACHE_CONTROL,
+        "Content-Language": locale,
         "Content-Type": "text/html; charset=utf-8",
+        Vary: "Accept-Language",
       });
       context.waitUntil(cache.put(cacheKey, page.clone()));
     }
@@ -135,15 +280,55 @@ export function normalizeSenderTime(value) {
   return normalized.toFixed(2);
 }
 
-function renderSharePage(page) {
+export function resolveLocale(acceptLanguage) {
+  if (!acceptLanguage) return DEFAULT_LOCALE;
+
+  const preferences = acceptLanguage
+    .split(",")
+    .map((entry, index) => {
+      const [rawTag, ...parameters] = entry.trim().split(";");
+      const qualityParameter = parameters.find((parameter) => parameter.trim().startsWith("q="));
+      const quality = qualityParameter === undefined
+        ? 1
+        : Number(qualityParameter.trim().slice(2));
+      return {
+        tag: rawTag.trim().toLowerCase(),
+        quality: Number.isFinite(quality) && quality >= 0 && quality <= 1 ? quality : 0,
+        index,
+      };
+    })
+    .filter((preference) => preference.tag && preference.quality > 0)
+    .sort((left, right) => right.quality - left.quality || left.index - right.index);
+
+  for (const preference of preferences) {
+    const tag = preference.tag;
+    if (tag === "zh" || tag === "zh-cn" || tag === "zh-sg" || tag.startsWith("zh-hans")) {
+      return "zh-Hans";
+    }
+    const baseLanguage = tag.split("-")[0];
+    if (["sv", "de", "fr", "es", "ja", "ar", "en"].includes(baseLanguage)) {
+      return baseLanguage;
+    }
+  }
+
+  return DEFAULT_LOCALE;
+}
+
+function renderSharePage(page, locale) {
+  const localized = COPY[locale] ?? COPY[DEFAULT_LOCALE];
+  const pageCopy = localized[page.kind];
   const canonicalURL = escapeHTML(page.canonicalURL);
-  const title = escapeHTML(page.title);
-  const description = escapeHTML(page.description);
-  const eyebrow = escapeHTML(page.eyebrow);
-  const message = escapeHTML(page.message);
+  const title = escapeHTML(pageCopy.title);
+  const description = escapeHTML(pageCopy.description);
+  const eyebrow = escapeHTML(pageCopy.eyebrow);
+  const message = escapeHTML(pageCopy.message);
+  const appIconAlt = escapeHTML(localized.appIconAlt);
+  const availability = escapeHTML(localized.availability);
+  const storeAction = escapeHTML(localized.storeAction);
+  const direction = locale === "ar" ? "rtl" : "ltr";
 
   return `<!doctype html>
-<html lang="en">
+<html lang="${locale}" dir="${direction}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -180,12 +365,12 @@ function renderSharePage(page) {
 </head>
 <body>
   <main>
-    <img class="icon" src="/app-icon.png" alt="Equation Genius app icon" width="104" height="104">
+    <img class="icon" src="/app-icon.png" alt="${appIconAlt}" width="104" height="104">
     <h1>Equation Genius</h1>
     <p class="eyebrow">${eyebrow}</p>
     <p class="message">${message}</p>
-    <p class="availability">Equation Genius is currently available for iPhone and iPad.</p>
-    <a class="store-link" href="${APP_STORE_URL}">Get or Update Equation Genius</a>
+    <p class="availability">${availability}</p>
+    <a class="store-link" href="${APP_STORE_URL}">${storeAction}</a>
   </main>
 </body>
 </html>`;
