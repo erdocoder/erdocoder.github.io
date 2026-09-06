@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#0d4f63">
+  <meta name="description" content="Solve equations. Take the challenge.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Equation Genius">
+  <meta property="og:title" content="Equation Genius">
+  <meta property="og:description" content="Solve equations. Take the challenge.">
+  <meta property="og:image" content="https://equation-genius.com/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Equation Genius">
+  <meta name="twitter:description" content="Solve equations. Take the challenge.">
+  <meta name="twitter:image" content="https://equation-genius.com/social-preview.png">
   <title>Equation Genius Challenge</title>
   <style>
     :root {
@@ -98,7 +110,7 @@
     <h1>Equation Genius</h1>
 
     <section class="challenge">
-      <p class="eyebrow">Daily Challenge</p>
+      <p class="eyebrow" id="share-type">Daily Challenge</p>
       <p class="message" id="challenge-message">You've been invited to an Equation Genius challenge.</p>
       <p class="availability">Available for iPhone and iPad.</p>
       <a class="store-link" href="https://apps.apple.com/app/equation-genius/id1475407618">View on the App Store</a>
@@ -113,10 +125,13 @@
 
   <script>
     const challengePath = /^\/challenge\/[^/]+\/?$/;
-    if (!challengePath.test(window.location.pathname)) {
+    const puzzlePath = /^\/puzzle\/[^/]+\/?$/;
+    if (!challengePath.test(window.location.pathname) && !puzzlePath.test(window.location.pathname)) {
       document.body.classList.add("invalid");
-    } else if (new URLSearchParams(window.location.search).get("source") === "puzzle") {
-      document.getElementById("challenge-message").textContent = "Can you solve this Equation Genius challenge?";
+    } else if (puzzlePath.test(window.location.pathname) ||
+               new URLSearchParams(window.location.search).get("source") === "puzzle") {
+      document.getElementById("share-type").textContent = "Shared Puzzle";
+      document.getElementById("challenge-message").textContent = "Can you solve this equation?";
     }
   </script>
 </body>

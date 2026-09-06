@@ -19,7 +19,7 @@ const COPY = {
       title: "Can you solve this puzzle?",
       description: "Try the puzzle in Equation Genius.",
       eyebrow: "Shared Puzzle",
-      message: "Can you solve this Equation Genius puzzle?",
+      message: "Can you solve this equation?",
     },
   },
   sv: {
@@ -36,7 +36,7 @@ const COPY = {
       title: "Kan du lösa den här ekvationen?",
       description: "Prova ekvationen i Equation Genius.",
       eyebrow: "Delad ekvation",
-      message: "Kan du lösa den här Equation Genius-ekvationen?",
+      message: "Kan du lösa den här ekvationen?",
     },
   },
   de: {
@@ -53,7 +53,7 @@ const COPY = {
       title: "Kannst du diese Gleichung lösen?",
       description: "Löse die Gleichung in Equation Genius.",
       eyebrow: "Geteilte Gleichung",
-      message: "Kannst du diese Equation Genius-Gleichung lösen?",
+      message: "Kannst du diese Gleichung lösen?",
     },
   },
   fr: {
@@ -70,7 +70,7 @@ const COPY = {
       title: "Pouvez-vous résoudre cette équation ?",
       description: "Essayez cette équation dans Equation Genius.",
       eyebrow: "Équation partagée",
-      message: "Pouvez-vous résoudre cette équation d’Equation Genius ?",
+      message: "Pouvez-vous résoudre cette équation ?",
     },
   },
   es: {
@@ -87,7 +87,7 @@ const COPY = {
       title: "¿Puedes resolver esta ecuación?",
       description: "Prueba la ecuación en Equation Genius.",
       eyebrow: "Ecuación compartida",
-      message: "¿Puedes resolver esta ecuación de Equation Genius?",
+      message: "¿Puedes resolver esta ecuación?",
     },
   },
   ja: {
@@ -104,7 +104,7 @@ const COPY = {
       title: "この方程式を解けますか？",
       description: "Equation Geniusで方程式に挑戦しましょう。",
       eyebrow: "共有された方程式",
-      message: "このEquation Geniusの方程式を解けますか？",
+      message: "この方程式を解けますか？",
     },
   },
   ar: {
@@ -121,7 +121,7 @@ const COPY = {
       title: "هل يمكنك حل هذه المعادلة؟",
       description: "جرّب حل المعادلة في Equation Genius.",
       eyebrow: "مسألة مشتركة",
-      message: "هل يمكنك حل هذه المسألة في Equation Genius؟",
+      message: "هل يمكنك حل هذه المعادلة؟",
     },
   },
   "zh-Hans": {
@@ -138,7 +138,7 @@ const COPY = {
       title: "你能解出这道方程吗？",
       description: "在 Equation Genius 中挑战这道方程。",
       eyebrow: "分享的方程",
-      message: "你能解出这道 Equation Genius 方程吗？",
+      message: "你能解出这道方程吗？",
     },
   },
 };
@@ -236,7 +236,7 @@ export function parseShareURL(url) {
       title: "Can you solve this puzzle?",
       description: "Try the puzzle in Equation Genius.",
       eyebrow: "Shared Puzzle",
-      message: "Can you solve this Equation Genius puzzle?",
+      message: "Can you solve this equation?",
     };
   }
 
@@ -258,6 +258,12 @@ export function isValidUTCDateID(value) {
 }
 
 export function isValidPuzzleID(value) {
+  const curatedMatch = value.match(/^t1-(\d{3})$/);
+  if (curatedMatch) {
+    const curatedID = Number(curatedMatch[1]);
+    return curatedID >= 1 && curatedID <= 999;
+  }
+
   const match = value.match(/^p(\d+)-l(\d+)-s(\d+)$/);
   if (!match) return false;
 

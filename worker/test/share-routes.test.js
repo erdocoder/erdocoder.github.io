@@ -68,10 +68,15 @@ test("duplicate or malformed time parameters fail", () => {
 test("puzzle IDs align with the native generator contract", () => {
   assert.equal(isValidPuzzleID("p1-l3-s1"), true);
   assert.equal(isValidPuzzleID("p1-l12-s2000000999"), true);
+  assert.equal(isValidPuzzleID("t1-001"), true);
+  assert.equal(isValidPuzzleID("t1-308"), true);
   assert.equal(isValidPuzzleID("p2-l10-s42"), false);
   assert.equal(isValidPuzzleID("p1-l13-s42"), false);
   assert.equal(isValidPuzzleID("p1-l010-s42"), false);
   assert.equal(isValidPuzzleID("p1-l10-s0"), false);
+  assert.equal(isValidPuzzleID("t1-000"), false);
+  assert.equal(isValidPuzzleID("t1-01"), false);
+  assert.equal(isValidPuzzleID("t2-001"), false);
 });
 
 test("wrong hosts, schemes, routes, and malformed IDs are rejected", () => {
@@ -121,6 +126,23 @@ test("the initial puzzle response is HTTP 200 without exposing an answer", async
   assert.equal(html.includes("answer=12"), false);
 });
 
+test("curated Tricky puzzle URLs receive the same generic fallback without leaking blind content", async () => {
+  installEmptyCache();
+  const result = await worker.fetch(
+    new Request("https://equation-genius.com/puzzle/t1-001?mode=blind_challenge"),
+    {},
+    { waitUntil() {} }
+  );
+  const html = await result.text();
+
+  assert.equal(result.status, 200);
+  assert.match(html, /property="og:title" content="Can you solve this puzzle\?"/);
+  assert.match(html, /property="og:url" content="https:\/\/equation-genius\.com\/puzzle\/t1-001"/);
+  assert.equal(html.includes("blind_challenge"), false);
+  assert.equal(html.includes("t1-001"), true);
+  assert.equal(html.includes("answer="), false);
+});
+
 test("share pages localize visible copy, metadata, language, and direction", async () => {
   installEmptyCache();
   const swedish = await worker.fetch(
@@ -154,14 +176,14 @@ test("share pages localize visible copy, metadata, language, and direction", asy
 
 test("every supported locale renders its established share-page terminology", async () => {
   const expectations = {
-    en: ["Shared Puzzle", "Get or Update Equation Genius"],
-    sv: ["Delad ekvation", "Hämta eller uppdatera Equation Genius"],
-    de: ["Geteilte Gleichung", "Equation Genius laden oder aktualisieren"],
-    fr: ["Équation partagée", "Obtenir ou mettre à jour Equation Genius"],
-    es: ["Ecuación compartida", "Obtener o actualizar Equation Genius"],
-    ja: ["共有された方程式", "Equation Geniusを入手またはアップデート"],
-    ar: ["مسألة مشتركة", "تنزيل Equation Genius أو تحديثه"],
-    "zh-Hans": ["分享的方程", "获取或更新 Equation Genius"],
+    en: ["Shared Puzzle", "Can you solve this equation?", "Get or Update Equation Genius"],
+    sv: ["Delad ekvation", "Kan du lösa den här ekvationen?", "Hämta eller uppdatera Equation Genius"],
+    de: ["Geteilte Gleichung", "Kannst du diese Gleichung lösen?", "Equation Genius laden oder aktualisieren"],
+    fr: ["Équation partagée", "Pouvez-vous résoudre cette équation ?", "Obtenir ou mettre à jour Equation Genius"],
+    es: ["Ecuación compartida", "¿Puedes resolver esta ecuación?", "Obtener o actualizar Equation Genius"],
+    ja: ["共有された方程式", "この方程式を解けますか？", "Equation Geniusを入手またはアップデート"],
+    ar: ["مسألة مشتركة", "هل يمكنك حل هذه المعادلة؟", "تنزيل Equation Genius أو تحديثه"],
+    "zh-Hans": ["分享的方程", "你能解出这道方程吗？", "获取或更新 Equation Genius"],
   };
 
   for (const [locale, expectedCopy] of Object.entries(expectations)) {
