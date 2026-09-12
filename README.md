@@ -12,7 +12,7 @@ Equation Genius is an iOS equation game that helps players improve mental math b
 - Game Center leaderboard
 
 Download on the App Store:
-https://apps.apple.com/...
+https://apps.apple.com/app/equation-genius/id1475407618
 
 Official website:
-https://yourusername.github.io/
+https://equation-genius.com/
