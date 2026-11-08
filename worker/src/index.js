@@ -1,8 +1,18 @@
 const CANONICAL_ORIGIN = "https://equation-genius.com";
 const SOCIAL_IMAGE_URL = `${CANONICAL_ORIGIN}/social-preview.png`;
 const APP_STORE_URL = "https://apps.apple.com/app/equation-genius/id1475407618";
+const WEBSITE_APP_STORE_URL = "https://apps.apple.com/app/apple-store/id1475407618?pt=120312754&ct=Meta_US_Tricky_Nov2026&mt=8";
 const CACHE_CONTROL = "public, max-age=3600, s-maxage=604800, stale-while-revalidate=86400";
 const DEFAULT_LOCALE = "en";
+const APP_STORE_PLACEMENTS = new Set(["homepage_top", "homepage_bottom"]);
+const APP_STORE_REFERRERS = new Set([
+  "chatgpt",
+  "claude",
+  "gemini",
+  "google",
+  "other_external",
+  "direct",
+]);
 
 const COPY = {
   en: {
@@ -152,7 +162,15 @@ export default {
       });
     }
 
-    const parsed = parseShareURL(new URL(request.url));
+    const requestURL = new URL(request.url);
+    if (isAppStoreRedirectURL(requestURL)) {
+      if (request.method === "GET" && isSameOriginNavigation(request)) {
+        recordAppStoreClick(env, requestURL);
+      }
+      return appStoreRedirectResponse();
+    }
+
+    const parsed = parseShareURL(requestURL);
     if (!parsed.ok) {
       return response(parsed.status === 400 ? "Bad Request" : "Not Found", parsed.status, {
         "Content-Type": "text/plain; charset=utf-8",
@@ -182,6 +200,65 @@ export default {
     return page;
   },
 };
+
+export function isAppStoreRedirectURL(url) {
+  return url.protocol === "https:" &&
+    url.hostname === "equation-genius.com" &&
+    url.port === "" &&
+    url.pathname === "/go/app-store";
+}
+
+export function normalizeAppStoreDimension(value, allowedValues) {
+  return allowedValues.has(value) ? value : "unknown";
+}
+
+function isSameOriginNavigation(request) {
+  const referrer = request.headers.get("Referer");
+  if (!referrer) return false;
+
+  try {
+    return new URL(referrer).origin === CANONICAL_ORIGIN;
+  } catch {
+    return false;
+  }
+}
+
+function recordAppStoreClick(env, url) {
+  const dataset = env?.APP_STORE_CLICKS;
+  if (!dataset || typeof dataset.writeDataPoint !== "function") return;
+
+  const placement = normalizeAppStoreDimension(
+    url.searchParams.get("placement"),
+    APP_STORE_PLACEMENTS
+  );
+  const referrer = normalizeAppStoreDimension(
+    url.searchParams.get("referrer"),
+    APP_STORE_REFERRERS
+  );
+
+  try {
+    dataset.writeDataPoint({
+      blobs: [placement, referrer],
+      doubles: [1],
+      indexes: ["app_store_click"],
+    });
+  } catch {
+    // Tracking must never prevent the App Store redirect.
+  }
+}
+
+function appStoreRedirectResponse() {
+  return new Response(null, {
+    status: 302,
+    headers: {
+      "Cache-Control": "private, no-store, max-age=0",
+      Location: WEBSITE_APP_STORE_URL,
+      "Referrer-Policy": "no-referrer",
+      "X-Content-Type-Options": "nosniff",
+      "X-Robots-Tag": "noindex, nofollow",
+    },
+  });
+}
 
 export function parseShareURL(url) {
   if (url.protocol !== "https:" || url.hostname !== "equation-genius.com" || url.port !== "") {

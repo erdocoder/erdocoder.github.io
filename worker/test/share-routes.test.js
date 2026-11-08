@@ -23,6 +23,92 @@ function installEmptyCache() {
   return writes;
 }
 
+function analyticsRecorder() {
+  const points = [];
+  return {
+    points,
+    binding: {
+      writeDataPoint(point) {
+        points.push(point);
+      },
+    },
+  };
+}
+
+test("the App Store route redirects to a fixed destination and records an allowed click", async () => {
+  const analytics = analyticsRecorder();
+  const result = await worker.fetch(
+    new Request(
+      "https://equation-genius.com/go/app-store?placement=homepage_top&referrer=chatgpt&destination=https://evil.example",
+      { headers: { Referer: "https://equation-genius.com/" } }
+    ),
+    { APP_STORE_CLICKS: analytics.binding },
+    { waitUntil() {} }
+  );
+
+  assert.equal(result.status, 302);
+  assert.equal(
+    result.headers.get("location"),
+    "https://apps.apple.com/app/apple-store/id1475407618?pt=120312754&ct=Meta_US_Tricky_Nov2026&mt=8"
+  );
+  assert.equal(result.headers.get("cache-control"), "private, no-store, max-age=0");
+  assert.equal(result.headers.get("referrer-policy"), "no-referrer");
+  assert.equal(result.headers.get("x-robots-tag"), "noindex, nofollow");
+  assert.deepEqual(analytics.points, [{
+    blobs: ["homepage_top", "chatgpt"],
+    doubles: [1],
+    indexes: ["app_store_click"],
+  }]);
+});
+
+test("the App Store route normalizes unrecognized dimensions", async () => {
+  const analytics = analyticsRecorder();
+  await worker.fetch(
+    new Request(
+      "https://equation-genius.com/go/app-store?placement=forged&referrer=forged",
+      { headers: { Referer: "https://equation-genius.com/privacy.html" } }
+    ),
+    { APP_STORE_CLICKS: analytics.binding },
+    { waitUntil() {} }
+  );
+
+  assert.deepEqual(analytics.points[0].blobs, ["unknown", "unknown"]);
+});
+
+test("HEAD and non-site navigation redirect without recording a click", async () => {
+  const analytics = analyticsRecorder();
+  const requests = [
+    new Request("https://equation-genius.com/go/app-store?placement=homepage_top", {
+      method: "HEAD",
+      headers: { Referer: "https://equation-genius.com/" },
+    }),
+    new Request("https://equation-genius.com/go/app-store?placement=homepage_top"),
+    new Request("https://equation-genius.com/go/app-store?placement=homepage_top", {
+      headers: { Referer: "https://attacker.example/" },
+    }),
+  ];
+
+  for (const request of requests) {
+    const result = await worker.fetch(
+      request,
+      { APP_STORE_CLICKS: analytics.binding },
+      { waitUntil() {} }
+    );
+    assert.equal(result.status, 302);
+  }
+  assert.equal(analytics.points.length, 0);
+});
+
+test("the App Store route rejects unsupported methods", async () => {
+  const result = await worker.fetch(
+    new Request("https://equation-genius.com/go/app-store", { method: "POST" }),
+    {},
+    { waitUntil() {} }
+  );
+  assert.equal(result.status, 405);
+  assert.equal(result.headers.get("allow"), "GET, HEAD");
+});
+
 test("valid challenge URLs are canonicalized and unknown parameters are ignored", () => {
   const parsed = parseShareURL(new URL(
     "https://equation-genius.com/challenge/2026-08-16?utm_source=test&time=17.485"

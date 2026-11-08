@@ -4,6 +4,11 @@ compatibility_date = "2026-08-16"
 workers_dev = false
 
 routes = [
+  { pattern = "equation-genius.com/go/app-store*", zone_name = "equation-genius.com" },
   { pattern = "equation-genius.com/challenge/*", zone_name = "equation-genius.com" },
   { pattern = "equation-genius.com/puzzle/*", zone_name = "equation-genius.com" }
 ]
+
+[[analytics_engine_datasets]]
+binding = "APP_STORE_CLICKS"
+dataset = "equation_genius_app_store_clicks"

@@ -226,7 +226,7 @@
       <h1>Equation Genius</h1>
       <p class="tagline">Solve. Improve. Compete.</p>
       <div class="store store-primary">
-        <a href="https://apps.apple.com/app/apple-store/id1475407618?pt=120312754&amp;ct=Meta_US_Tricky_Nov2026&amp;mt=8">
+        <a href="/go/app-store?placement=homepage_top" data-app-store-link>
           <img src="app-store-badge.svg" alt="Download Equation Genius on the App Store">
         </a>
         <p class="availability">Available on iPhone and iPad · Compatible with Mac</p>
@@ -283,7 +283,7 @@
     </section>
 
     <div class="store">
-      <a href="https://apps.apple.com/app/apple-store/id1475407618?pt=120312754&amp;ct=Meta_US_Tricky_Nov2026&amp;mt=8">
+      <a href="/go/app-store?placement=homepage_bottom" data-app-store-link>
         <img src="app-store-badge.svg" alt="Download on the App Store">
       </a>
       <p class="availability">Available on iPhone and iPad · Compatible with Mac</p>
@@ -293,6 +293,33 @@
       © 2026 Equation Genius · <a href="privacy.html">Privacy Policy</a>
     </footer>
   </main>
+  <script>
+    (() => {
+      const classifyReferrer = () => {
+        if (!document.referrer) return "direct";
+
+        try {
+          const referrer = new URL(document.referrer);
+          const hostname = referrer.hostname.toLowerCase();
+          if (referrer.origin === window.location.origin) return "direct";
+          if (hostname === "chatgpt.com" || hostname.endsWith(".chatgpt.com") || hostname === "chat.openai.com") return "chatgpt";
+          if (hostname === "claude.ai" || hostname.endsWith(".claude.ai")) return "claude";
+          if (hostname === "gemini.google.com" || hostname === "bard.google.com") return "gemini";
+          if (hostname === "google.com" || hostname.startsWith("www.google.")) return "google";
+          return "other_external";
+        } catch {
+          return "direct";
+        }
+      };
+
+      const referrer = classifyReferrer();
+      document.querySelectorAll("[data-app-store-link]").forEach((link) => {
+        const url = new URL(link.href);
+        url.searchParams.set("referrer", referrer);
+        link.href = url.toString();
+      });
+    })();
+  </script>
   <!-- Cloudflare Web Analytics -->
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"9425fccfcbf14d27bc73003986b924d6"}'></script>
   <!-- End Cloudflare Web Analytics -->
