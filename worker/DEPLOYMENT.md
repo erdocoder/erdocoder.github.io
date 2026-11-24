@@ -6,8 +6,9 @@ The `APP_STORE_CLICKS` Analytics Engine binding stores aggregate click counters.
 
 ## Before deployment
 
-1. Publish the website repository's updated
-   `.well-known/apple-app-site-association`. Confirm it authorizes both
+1. Keep the website repository's updated
+   `.well-known/apple-app-site-association` aligned with the exact AASA response
+   served by this Worker. Confirm it authorizes
    `/challenge/*`, `/puzzle/*`, and `/league-challenge/*` under
    `WX97LBC882.com.jojoapps.emath`.
 2. Confirm the endpoint returns HTTP 200 without a redirect:
@@ -39,13 +40,14 @@ npm run deploy
 
 `wrangler.toml` attaches exactly these zone routes:
 
+- `equation-genius.com/.well-known/apple-app-site-association`
 - `equation-genius.com/go/app-store*` (the Worker itself accepts only the exact path)
 - `equation-genius.com/challenge/*`
 - `equation-genius.com/puzzle/*`
 - `equation-genius.com/league-challenge/*`
 
-Do not replace them with `equation-genius.com/*`. In particular,
-`/.well-known/apple-app-site-association` must continue to reach GitHub Pages.
+Do not replace them with `equation-genius.com/*`. The exact AASA route is served by
+the Worker so Universal Links remain available even if the static origin is down.
 
 The App Store route has a hard-coded destination and accepts only coarse,
 allowlisted dimensions. It records neither IP addresses, cookies, raw referrers,

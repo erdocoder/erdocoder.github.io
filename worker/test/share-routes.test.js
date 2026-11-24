@@ -3,12 +3,30 @@ import test from "node:test";
 
 import {
   default as worker,
+  isAASAURL,
   isValidPuzzleID,
   isValidUTCDateID,
   normalizeSenderTime,
   parseShareURL,
   resolveLocale,
 } from "../src/index.js";
+
+test("the exact AASA endpoint serves every supported Universal Link family", async () => {
+  installEmptyCache();
+  const url = new URL("https://equation-genius.com/.well-known/apple-app-site-association");
+  assert.equal(isAASAURL(url), true);
+  assert.equal(isAASAURL(new URL(`${url}?unexpected=1`)), false);
+
+  const result = await worker.fetch(new Request(url), {}, { waitUntil() {} });
+  const document = await result.json();
+
+  assert.equal(result.status, 200);
+  assert.match(result.headers.get("content-type"), /^application\/json/);
+  assert.deepEqual(
+    document.applinks.details[0].components.map((component) => component["/"]),
+    ["/challenge/*", "/puzzle/*", "/league-challenge/*"]
+  );
+});
 
 function installEmptyCache() {
   const writes = [];

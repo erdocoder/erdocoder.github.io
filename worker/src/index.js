@@ -2,6 +2,21 @@ const CANONICAL_ORIGIN = "https://equation-genius.com";
 const SOCIAL_IMAGE_URL = `${CANONICAL_ORIGIN}/social-preview.png`;
 const APP_STORE_URL = "https://apps.apple.com/app/equation-genius/id1475407618";
 const WEBSITE_APP_STORE_URL = "https://apps.apple.com/app/apple-store/id1475407618?pt=120312754&ct=Meta_US_Tricky_Nov2026&mt=8";
+const AASA_PATH = "/.well-known/apple-app-site-association";
+const AASA_DOCUMENT = JSON.stringify({
+  applinks: {
+    details: [
+      {
+        appIDs: ["WX97LBC882.com.jojoapps.emath"],
+        components: [
+          { "/": "/challenge/*" },
+          { "/": "/puzzle/*" },
+          { "/": "/league-challenge/*" },
+        ],
+      },
+    ],
+  },
+});
 const CACHE_CONTROL = "public, max-age=3600, s-maxage=604800, stale-while-revalidate=86400";
 const DEFAULT_LOCALE = "en";
 const APP_STORE_PLACEMENTS = new Set(["homepage_top", "homepage_bottom"]);
@@ -211,6 +226,14 @@ export default {
     }
 
     const requestURL = new URL(request.url);
+    if (isAASAURL(requestURL)) {
+      const body = request.method === "HEAD" ? null : AASA_DOCUMENT;
+      return response(body, 200, {
+        "Cache-Control": "public, max-age=3600",
+        "Content-Type": "application/json",
+      });
+    }
+
     if (isAppStoreRedirectURL(requestURL)) {
       if (request.method === "GET" && isSameOriginNavigation(request)) {
         recordAppStoreClick(env, requestURL);
@@ -248,6 +271,14 @@ export default {
     return page;
   },
 };
+
+export function isAASAURL(url) {
+  return url.protocol === "https:" &&
+    url.hostname === "equation-genius.com" &&
+    url.port === "" &&
+    url.pathname === AASA_PATH &&
+    url.search === "";
+}
 
 export function isAppStoreRedirectURL(url) {
   return url.protocol === "https:" &&
