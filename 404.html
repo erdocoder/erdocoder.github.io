@@ -126,8 +126,15 @@
   <script>
     const challengePath = /^\/challenge\/[^/]+\/?$/;
     const puzzlePath = /^\/puzzle\/[^/]+\/?$/;
-    if (!challengePath.test(window.location.pathname) && !puzzlePath.test(window.location.pathname)) {
+    const leagueChallengePath = /^\/league-challenge\/v1\/[^/]+\/?$/;
+    if (!challengePath.test(window.location.pathname) &&
+        !puzzlePath.test(window.location.pathname) &&
+        !leagueChallengePath.test(window.location.pathname)) {
       document.body.classList.add("invalid");
+    } else if (leagueChallengePath.test(window.location.pathname)) {
+      document.querySelector(".eyebrow").textContent = "90-Second Challenge";
+      document.getElementById("challenge-message").textContent =
+        "You've been invited to a timed Equation Genius challenge.";
     } else if (puzzlePath.test(window.location.pathname) ||
                new URLSearchParams(window.location.search).get("source") === "puzzle") {
       document.getElementById("share-type").textContent = "Shared Puzzle";

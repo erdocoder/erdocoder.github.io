@@ -165,6 +165,33 @@ test("puzzle IDs align with the native generator contract", () => {
   assert.equal(isValidPuzzleID("t2-001"), false);
 });
 
+test("league challenge URLs preserve supported descriptor and comparison fields", () => {
+  const parsed = parseShareURL(new URL(
+    "https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sstable-seed_2026?score=001275&solved=14"
+  ));
+  assert.equal(parsed.ok, true);
+  assert.equal(parsed.kind, "leagueChallenge");
+  assert.equal(
+    parsed.canonicalURL,
+    "https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sstable-seed_2026?score=1275&solved=14"
+  );
+});
+
+test("league challenge routes reject unsupported versions and malformed claims", () => {
+  const rejected = [
+    "https://equation-genius.com/league-challenge/v2/l3-p5-g1-c3-r1-sstable-seed_2026",
+    "https://equation-genius.com/league-challenge/v1/l3-p6-g1-c3-r1-sstable-seed_2026",
+    "https://equation-genius.com/league-challenge/v1/l4-p5-g1-c3-r1-sstable-seed_2026",
+    "https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sshort",
+    "https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sstable-seed_2026?official=true",
+    "https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sstable-seed_2026?score=1&score=2",
+    "https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sstable-seed_2026?solved=1001",
+  ];
+  for (const value of rejected) {
+    assert.equal(parseShareURL(new URL(value)).ok, false, value);
+  }
+});
+
 test("wrong hosts, schemes, routes, and malformed IDs are rejected", () => {
   const rejected = [
     "http://equation-genius.com/challenge/2026-08-16",
@@ -210,6 +237,26 @@ test("the initial puzzle response is HTTP 200 without exposing an answer", async
   assert.match(html, /property="og:title" content="Can you solve this puzzle\?"/);
   assert.match(html, /property="og:url" content="https:\/\/equation-genius\.com\/puzzle\/p1-l10-s42"/);
   assert.equal(html.includes("answer=12"), false);
+});
+
+test("the initial league challenge response is generic and preserves its canonical invitation", async () => {
+  installEmptyCache();
+  const result = await worker.fetch(
+    new Request(
+      "https://equation-genius.com/league-challenge/v1/l2-p5-g1-c3-r1-sstable-seed_2026?score=800&solved=10"
+    ),
+    {},
+    { waitUntil() {} }
+  );
+  const html = await result.text();
+
+  assert.equal(result.status, 200);
+  assert.match(html, /property="og:title" content="Equation Genius – 90-Second Challenge"/);
+  assert.match(
+    html,
+    /property="og:url" content="https:\/\/equation-genius\.com\/league-challenge\/v1\/l2-p5-g1-c3-r1-sstable-seed_2026\?score=800&amp;solved=10"/
+  );
+  assert.equal(html.includes("Shared score: 800"), false);
 });
 
 test("curated Tricky puzzle URLs receive the same generic fallback without leaking blind content", async () => {

@@ -31,6 +31,12 @@ const COPY = {
       eyebrow: "Shared Puzzle",
       message: "Can you solve this equation?",
     },
+    leagueChallenge: {
+      title: "Equation Genius – 90-Second Challenge",
+      description: "Play the same League Practice challenge.",
+      eyebrow: "90-Second Challenge",
+      message: "You've been invited to a timed Equation Genius challenge.",
+    },
   },
   sv: {
     appIconAlt: "Appikonen för Equation Genius",
@@ -47,6 +53,12 @@ const COPY = {
       description: "Prova ekvationen i Equation Genius.",
       eyebrow: "Delad ekvation",
       message: "Kan du lösa den här ekvationen?",
+    },
+    leagueChallenge: {
+      title: "Equation Genius – 90-sekundersutmaning",
+      description: "Spela samma League Practice-utmaning.",
+      eyebrow: "90-sekundersutmaning",
+      message: "Du har blivit inbjuden till en tidsutmaning i Equation Genius.",
     },
   },
   de: {
@@ -65,6 +77,12 @@ const COPY = {
       eyebrow: "Geteilte Gleichung",
       message: "Kannst du diese Gleichung lösen?",
     },
+    leagueChallenge: {
+      title: "Equation Genius – 90-Sekunden-Challenge",
+      description: "Spiele dieselbe League-Übungs-Challenge.",
+      eyebrow: "90-Sekunden-Challenge",
+      message: "Du wurdest zu einer zeitlich begrenzten Equation Genius-Challenge eingeladen.",
+    },
   },
   fr: {
     appIconAlt: "Icône de l’app Equation Genius",
@@ -81,6 +99,12 @@ const COPY = {
       description: "Essayez cette équation dans Equation Genius.",
       eyebrow: "Équation partagée",
       message: "Pouvez-vous résoudre cette équation ?",
+    },
+    leagueChallenge: {
+      title: "Equation Genius – Défi de 90 secondes",
+      description: "Jouez au même défi d’entraînement de Ligue.",
+      eyebrow: "Défi de 90 secondes",
+      message: "Vous avez été invité à un défi chronométré Equation Genius.",
     },
   },
   es: {
@@ -99,6 +123,12 @@ const COPY = {
       eyebrow: "Ecuación compartida",
       message: "¿Puedes resolver esta ecuación?",
     },
+    leagueChallenge: {
+      title: "Equation Genius – Desafío de 90 segundos",
+      description: "Juega el mismo desafío de práctica de Liga.",
+      eyebrow: "Desafío de 90 segundos",
+      message: "Te han invitado a un desafío cronometrado de Equation Genius.",
+    },
   },
   ja: {
     appIconAlt: "Equation Geniusのアプリアイコン",
@@ -115,6 +145,12 @@ const COPY = {
       description: "Equation Geniusで方程式に挑戦しましょう。",
       eyebrow: "共有された方程式",
       message: "この方程式を解けますか？",
+    },
+    leagueChallenge: {
+      title: "Equation Genius – 90秒チャレンジ",
+      description: "同じリーグ練習チャレンジに挑戦しましょう。",
+      eyebrow: "90秒チャレンジ",
+      message: "Equation Geniusのタイムチャレンジに招待されました。",
     },
   },
   ar: {
@@ -133,6 +169,12 @@ const COPY = {
       eyebrow: "مسألة مشتركة",
       message: "هل يمكنك حل هذه المعادلة؟",
     },
+    leagueChallenge: {
+      title: "Equation Genius – تحدي 90 ثانية",
+      description: "العب تحدي تدريب الدوري نفسه.",
+      eyebrow: "تحدي 90 ثانية",
+      message: "تمت دعوتك إلى تحدٍ موقّت في Equation Genius.",
+    },
   },
   "zh-Hans": {
     appIconAlt: "Equation Genius App 图标",
@@ -149,6 +191,12 @@ const COPY = {
       description: "在 Equation Genius 中挑战这道方程。",
       eyebrow: "分享的方程",
       message: "你能解出这道方程吗？",
+    },
+    leagueChallenge: {
+      title: "Equation Genius – 90 秒挑战",
+      description: "体验相同的联赛练习挑战。",
+      eyebrow: "90 秒挑战",
+      message: "你收到了 Equation Genius 限时挑战邀请。",
     },
   },
 };
@@ -317,7 +365,50 @@ export function parseShareURL(url) {
     };
   }
 
+  const leagueChallengeMatch = url.pathname.match(
+    /^\/league-challenge\/v1\/l([1-3])-p5-g1-c3-r1-s([A-Za-z0-9_-]{8,64})\/?$/
+  );
+  if (leagueChallengeMatch) {
+    const score = normalizedBoundedIntegerQuery(url, "score", 999_999);
+    const solved = normalizedBoundedIntegerQuery(url, "solved", 1_000);
+    if (score.invalid || solved.invalid) {
+      return { ok: false, status: 400 };
+    }
+
+    const compactIdentity = `l${leagueChallengeMatch[1]}-p5-g1-c3-r1-s${leagueChallengeMatch[2]}`;
+    const canonicalURL = new URL(
+      `${CANONICAL_ORIGIN}/league-challenge/v1/${compactIdentity}`
+    );
+    if (score.value !== null) canonicalURL.searchParams.set("score", score.value);
+    if (solved.value !== null) canonicalURL.searchParams.set("solved", solved.value);
+
+    return {
+      ok: true,
+      kind: "leagueChallenge",
+      canonicalURL: canonicalURL.toString(),
+    };
+  }
+
   return { ok: false, status: 404 };
+}
+
+function normalizedBoundedIntegerQuery(url, name, maximum) {
+  const supportedNames = new Set(["score", "solved"]);
+  if ([...url.searchParams.keys()].some((key) => !supportedNames.has(key))) {
+    return { invalid: true, value: null };
+  }
+
+  const values = url.searchParams.getAll(name);
+  if (values.length === 0) return { invalid: false, value: null };
+  if (values.length !== 1 || !/^\d+$/.test(values[0])) {
+    return { invalid: true, value: null };
+  }
+
+  const value = Number(values[0]);
+  if (!Number.isSafeInteger(value) || value < 0 || value > maximum) {
+    return { invalid: true, value: null };
+  }
+  return { invalid: false, value: String(value) };
 }
 
 export function isValidUTCDateID(value) {

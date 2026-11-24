@@ -1,6 +1,6 @@
 # Equation Genius website Worker deployment
 
-The Worker is stateless and handles the two public share-route families plus one
+The Worker is stateless and handles the three public share-route families plus one
 exact App Store redirect route. It requires no secrets, KV, D1, or database.
 The `APP_STORE_CLICKS` Analytics Engine binding stores aggregate click counters.
 
@@ -8,7 +8,7 @@ The `APP_STORE_CLICKS` Analytics Engine binding stores aggregate click counters.
 
 1. Publish the website repository's updated
    `.well-known/apple-app-site-association`. Confirm it authorizes both
-   `/challenge/*` and `/puzzle/*` under
+   `/challenge/*`, `/puzzle/*`, and `/league-challenge/*` under
    `WX97LBC882.com.jojoapps.emath`.
 2. Confirm the endpoint returns HTTP 200 without a redirect:
 
@@ -42,6 +42,7 @@ npm run deploy
 - `equation-genius.com/go/app-store*` (the Worker itself accepts only the exact path)
 - `equation-genius.com/challenge/*`
 - `equation-genius.com/puzzle/*`
+- `equation-genius.com/league-challenge/*`
 
 Do not replace them with `equation-genius.com/*`. In particular,
 `/.well-known/apple-app-site-association` must continue to reach GitHub Pages.
@@ -80,7 +81,7 @@ rule scoped only to `/go/app-store`, using a conservative per-IP threshold
 available on the account's plan. Rate limiting is a dashboard control rather
 than application code and should be verified after deployment.
 
-The `/challenge/*` and `/puzzle/*` routes remain protected by exact host and
+The `/challenge/*`, `/puzzle/*`, and `/league-challenge/*` routes remain protected by exact host and
 HTTPS checks, GET/HEAD-only handling, strict challenge-date and puzzle-ID
 validation, bounded sender-time parsing, generic no-answer metadata, `noindex`,
 a restrictive Content Security Policy, `Referrer-Policy: no-referrer`, MIME
@@ -94,6 +95,7 @@ browser-rendered DOM:
 ```sh
 curl -i 'https://equation-genius.com/challenge/2026-08-16?time=17.48'
 curl -i 'https://equation-genius.com/puzzle/p1-l10-s42'
+curl -i 'https://equation-genius.com/league-challenge/v1/l3-p5-g1-c3-r1-sstable-seed_2026?score=800&solved=10'
 curl -i 'https://equation-genius.com/challenge/2026-02-30'
 curl -i 'https://equation-genius.com/puzzle/p1-l010-s42'
 curl -I 'https://equation-genius.com/go/app-store?placement=homepage_top&referrer=direct'

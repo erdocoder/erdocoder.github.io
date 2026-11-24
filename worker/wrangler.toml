@@ -6,7 +6,8 @@ workers_dev = false
 routes = [
   { pattern = "equation-genius.com/go/app-store*", zone_name = "equation-genius.com" },
   { pattern = "equation-genius.com/challenge/*", zone_name = "equation-genius.com" },
-  { pattern = "equation-genius.com/puzzle/*", zone_name = "equation-genius.com" }
+  { pattern = "equation-genius.com/puzzle/*", zone_name = "equation-genius.com" },
+  { pattern = "equation-genius.com/league-challenge/*", zone_name = "equation-genius.com" }
 ]
 
 [[analytics_engine_datasets]]
